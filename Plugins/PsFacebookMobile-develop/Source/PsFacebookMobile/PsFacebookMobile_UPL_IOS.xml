@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- PsFacebookMobile plugin additions-->
+<root xmlns:android="http://schemas.ios.com/res/ios">
+  <init>
+    <log text="PsFacebookMobile SDK IOS Initialization"/>
+
+    <setStringFromProperty result="FacebookAppId" ini="Engine" section="/Script/PsFacebookMobile.PsFacebookMobileSettings" property="FacebookAppId" default=""/>
+    <setStringFromProperty result="FacebookDisplayName" ini="Engine" section="/Script/PsFacebookMobile.PsFacebookMobileSettings" property="FacebookDisplayName" default=""/>
+  </init>
+
+  <iosPListUpdates>
+    <loopElements tag="$">
+      <setStringFromTag result="CurrentTag" tag="$"/>
+      <setBoolIsEqual   result="isRootDictionary" arg1="$S(CurrentTag)" arg2="dict"/>
+
+      <!-- Process root dict only -->
+      <if condition="isRootDictionary">
+        <true>
+          <!-- FacebookAppID -->
+          <setElement result="FacebookAppIdKey" value="key" text="FacebookAppID"/>
+          <addElement tag="$" name="FacebookAppIdKey"/>
+          <setElement result="FacebookAppIdValue" value="string" text="$S(FacebookAppId)"/>
+          <addElement tag="$" name="FacebookAppIdValue"/>
+
+          <!-- FacebookDisplayName -->
+          <setElement result="FacebookDisplayNameKey" value="key" text="FacebookDisplayName"/>
+          <addElement tag="$" name="FacebookDisplayNameKey"/>
+          <setElement result="FacebookDisplayNameValue" value="string" text="$S(FacebookDisplayName)"/>
+          <addElement tag="$" name="FacebookDisplayNameValue"/>
+
+          <setElement result="FacebookAutoLogAppEventsEnabledKey" value="key" text="FacebookAutoLogAppEventsEnabled"/>
+          <addElement tag="$" name="FacebookAutoLogAppEventsEnabledKey"/>
+          <setElement result="eFalse" value="false" text=""/>
+          <addElement tag="$" name="eFalse"/>
+
+          <setElement result="FacebookAdvertiserIDCollectionEnabledKey" value="key" text="FacebookAdvertiserIDCollectionEnabled"/>
+          <addElement tag="$" name="FacebookAdvertiserIDCollectionEnabledKey"/>
+          <addElement tag="$" name="eFalse"/>
+
+          <!-- CFBundleURLTypes -->
+          <!-- ======================================================================================================================== -->
+          <setBool result="bCFBundleURLTypesFound" value="false"/>
+          <setBool result="bCFBundleURLTypesSearchNextElement" value="false"/>
+
+          <!-- Check that dict is already exists -->
+          <loopElements tag="$">
+            <setStringFromTagText result="TagIteratorValue" tag="$"/>
+            <setBoolIsEqual result="isCFBundleURLTypes" arg1="$S(TagIteratorValue)" arg2="CFBundleURLTypes"/>
+
+            <if condition="isCFBundleURLTypes">
+              <true>
+                <setBool result="bCFBundleURLTypesFound" value="true"/>
+              </true>
+            </if>
+          </loopElements>
+
+          <!-- Create dict section if now one found -->
+          <if condition="bCFBundleURLTypesFound">
+            <false>
+              <setElement result="dCFBundleURLTypes" value="key" text="CFBundleURLTypes"/>
+              <addElement tag="$" name="dCFBundleURLTypes"/>
+              <setElement result="dCFBundleURLTypesRootArray" value="array"/>
+              <addElement tag="$" name="dCFBundleURLTypesRootArray"/>
+            </false>
+          </if>
+
+          <!-- Add FacebookAppId value to dict array -->
+          <loopElements tag="$">
+            <setStringFromTagText result="TagIteratorValue" tag="$"/>
+            <setBoolIsEqual result="isCFBundleURLTypes" arg1="$S(TagIteratorValue)" arg2="CFBundleURLTypes"/>
+
+            <if condition="bCFBundleURLTypesSearchNextElement">
+              <true>
+                <setBool result="bCFBundleURLTypesSearchNextElement" value="false"/>
+
+                <setElement result="dCFBundleURLTypesDict" value="dict"/>
+
+                <setElement result="dCFBundleURLSchemes" value="key" text="CFBundleURLSchemes"/>
+                <addElement tag="$dCFBundleURLTypesDict" name="dCFBundleURLSchemes"/>
+
+                <setElement result="dCFBundleURLSchemesRootArray" value="array"/>
+
+                <setElement result="dCFBundleURLSchemesFacebookAppId" value="string" text="fb$S(FacebookAppId)"/>
+                <addElement tag="$dCFBundleURLSchemesRootArray" name="dCFBundleURLSchemesFacebookAppId"/>
+
+                <addElement tag="$dCFBundleURLTypesDict" name="dCFBundleURLSchemesRootArray"/>
+
+                <addElement tag="$" name="dCFBundleURLTypesDict"/>
+              </true>
+            </if>
+
+            <if condition="isCFBundleURLTypes">
+              <true>
+                <setBool result="bCFBundleURLTypesSearchNextElement" value="true"/>
+              </true>
+            </if>
+          </loopElements>
+
+          <!-- LSApplicationQueriesSchemes -->
+          <!-- =========================== -->
+          <setBool result="bLSApplicationQueriesSchemesFound" value="false"/>
+          <setBool result="bLSApplicationQueriesSchemesSearchNextElement" value="false"/>
+
+          <!-- Check that dict is already exists -->
+          <loopElements tag="$">
+            <setStringFromTagText result="TagIteratorValue" tag="$"/>
+            <setBoolIsEqual result="isLSApplicationQueriesSchemes" arg1="$S(TagIteratorValue)" arg2="LSApplicationQueriesSchemes"/>
+
+            <if condition="isLSApplicationQueriesSchemes">
+              <true>
+                <setBool result="bLSApplicationQueriesSchemesFound" value="true"/>
+              </true>
+            </if>
+          </loopElements>
+
+          <!-- Create dict section if now one found -->
+          <if condition="bLSApplicationQueriesSchemesFound">
+            <false>
+              <setElement result="dLSApplicationQueriesSchemes" value="key" text="LSApplicationQueriesSchemes"/>
+              <addElement tag="$" name="dLSApplicationQueriesSchemes"/>
+              <setElement result="dLSApplicationQueriesSchemesRootArray" value="array"/>
+              <addElement tag="$" name="dLSApplicationQueriesSchemesRootArray"/>
+            </false>
+          </if>
+
+          <!-- Add value to dict array -->
+          <loopElements tag="$">
+            <setStringFromTagText result="TagIteratorValue" tag="$"/>
+            <setBoolIsEqual result="isLSApplicationQueriesSchemes" arg1="$S(TagIteratorValue)" arg2="LSApplicationQueriesSchemes"/>
+
+            <if condition="bLSApplicationQueriesSchemesSearchNextElement">
+              <true>
+                <setBool result="bLSApplicationQueriesSchemesSearchNextElement" value="false"/>
+
+                <setElement result="dLSApplicationQueriesSchemesfbapi" value="string" text="fbapi"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemesfbapi"/>
+
+                <setElement result="dLSApplicationQueriesSchemesfbmessengershareapi" value="string" text="fb-messenger-share-api"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemesfbmessengershareapi"/>
+
+                <setElement result="dLSApplicationQueriesSchemesfbauth" value="string" text="fbauth2"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemesfbauth"/>
+
+                <setElement result="dLSApplicationQueriesSchemesfbshareextension" value="string" text="fbshareextension"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemesfbshareextension"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20130214" value="string" text="fbapi20130214"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20130214"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20130410" value="string" text="fbapi20130410"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20130410"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20130702" value="string" text="fbapi20130702"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20130702"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20131010" value="string" text="fbapi20131010"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20131010"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20131219" value="string" text="fbapi20131219"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20131219"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20140410" value="string" text="fbapi20140410"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20140410"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20140116" value="string" text="fbapi20140116"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20140116"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20150313" value="string" text="fbapi20150313"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20150313"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20150629" value="string" text="fbapi20150629"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20150629"/>
+
+                <setElement result="dLSApplicationQueriesSchemes_fbapi20160328" value="string" text="fbapi20160328"/>
+                <addElement tag="$" name="dLSApplicationQueriesSchemes_fbapi20160328"/>
+              </true>
+            </if>
+
+            <if condition="isLSApplicationQueriesSchemes">
+              <true>
+                <setBool result="bLSApplicationQueriesSchemesSearchNextElement" value="true"/>
+              </true>
+            </if>
+          </loopElements>
+        </true>
+      </if>
+    </loopElements>
+  </iosPListUpdates>
+</root>
