@@ -3,12 +3,6 @@
 	"EngineAssociation": "4.25",
 	"Category": "",
 	"Description": "",
-	"Plugins": [
-		{
-			"Name": "RemoteSession",
-			"Enabled": true
-		}
-	],
 	"TargetPlatforms": [
 		"IOS",
 		"Android"
