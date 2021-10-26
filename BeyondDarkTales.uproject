@@ -16,6 +16,19 @@
 				"Mac",
 				"Linux"
 			]
+		},
+		{
+			"Name": "Firebase",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Android",
+				"IOS"
+			]
+		},
+		{
+			"Name": "FirebaseAnalytics",
+			"Enabled": false,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/2a6af776ec8a493b9fac74cf31503682"
 		}
 	],
 	"TargetPlatforms": [
