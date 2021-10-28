@@ -75,3 +75,4 @@ DerivedDataCache/*
 ArchivedBuilds/*
 BuildAndroid.bat
 BuildLM.bat
+Plugins/*
