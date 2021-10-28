@@ -68,10 +68,11 @@ Saved/*
 
 # Compiled source files for the engine to use
 Intermediate/*
-Plugins/*
+Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
 ArchivedBuilds/*
 BuildAndroid.bat
 BuildLM.bat
+Plugins/*
