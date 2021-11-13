@@ -1,0 +1,30 @@
+{
+	"FileVersion": 3,
+	"Version": 1050400,
+	"VersionName": "1.5.4",
+	"FriendlyName": "Facebook Goodies",
+	"Description": "Facebook plugin for Unreal Engine",
+	"Category": "Code Plugins",
+	"CreatedBy": "Nineva Studios",
+	"CreatedByURL": "https://ninevastudios.com/",
+	"DocsURL": "https://docs.ninevastudios.com/#/ue-plugins/facebook-goodies",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/c7a93bdfb28b4141818e68201aebf3bc",
+	"SupportURL": "mailto:support@ninevastudios.com",
+	"EngineVersion": "4.27.0",
+	"CanContainContent": true,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "FacebookGoodies",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32",
+				"Mac",
+				"Android",
+				"IOS"
+			]
+		}
+	]
+}
