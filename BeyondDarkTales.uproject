@@ -29,11 +29,6 @@
 			"Name": "FirebaseAnalytics",
 			"Enabled": true,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/2a6af776ec8a493b9fac74cf31503682"
-		},
-		{
-			"Name": "FacebookGoodies",
-			"Enabled": true,
-			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/c7a93bdfb28b4141818e68201aebf3bc"
 		}
 	],
 	"TargetPlatforms": [
