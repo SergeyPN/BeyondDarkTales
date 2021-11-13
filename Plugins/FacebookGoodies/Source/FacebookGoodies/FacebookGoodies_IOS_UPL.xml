@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (c) 2020 Nineva Studios
+ -->
+<root xmlns:android="http://schemas.android.com/apk/res/ios">
+  <init>
+    <log text="[FacebookGoodies] iOS UPL initialization"/>
+    <setStringFromProperty result="FacebookAppID" ini="Engine" section="/Script/FacebookGoodies.FacebookGoodiesSettings" property="FacebookAppID"/>
+    <setStringFromProperty result="FacebookClientToken" ini="Engine" section="/Script/FacebookGoodies.FacebookGoodiesSettings" property="FacebookClientToken"/>
+    
+    <setBoolFromProperty result="bEnableAudienceNetwork" ini="Engine" section="/Script/FacebookGoodies.FacebookGoodiesSettings" property="bEnableAudienceNetwork" default="false"/>
+    <!--Check if FacebookID is set-->
+    <setIntLength result="FacebookIDLength" source="$S(FacebookAppID)"/>
+    <setBoolIsGreater result="bIsFacebookIDValid" arg1="$I(FacebookIDLength)" arg2="0"/>
+
+    <if condition="bIsFacebookIDValid">
+      <false>
+        <log text="[FacebookGoodies] Warning: Facebook App ID is not specified. Please input a valid Facebook ID in project settings. Your application will crash on start."/>
+        <return/>
+      </false>
+    </if>
+  
+  <setBoolFromProperty result="EnableFacebookAutoLogEvents" ini="Engine" section="/Script/FacebookGoodies.FacebookGoodiesSettings" property="bAutoLogEvents" default="true"/>
+  <setBoolFromProperty result="EnableIDCollection" ini="Engine" section="/Script/FacebookGoodies.FacebookGoodiesSettings" property="bEnableAdvertiserIDCollection" default="true"/>
+  </init>
+
+  <iosPListUpdates>
+    <!-- Facebook app id -->
+    <setElement result="FacebookAppIdKey" value="key" text="FacebookAppID"/>
+    <addElement tag="dict" name="FacebookAppIdKey" once="true"/>
+    <setElement result="FacebookAppIdString" value="string" text="$S(FacebookAppID)"/>
+    <addElement tag="dict" name="FacebookAppIdString" once="true"/>
+
+    <!-- Facebook client token key -->
+    <setElement result="FacebookClientTokenKey" value="key" text="FacebookClientToken"/>
+    <addElement tag="dict" name="FacebookClientTokenKey" once="true"/>
+    <setElement result="FacebookClientTokenString" value="string" text="$S(FacebookClientToken)"/>
+    <addElement tag="dict" name="FacebookClientTokenString" once="true"/>
+  
+    <!-- https://developers.facebook.com/docs/app-events/getting-started-app-events-ios -->
+    <!-- FacebookAutoLogAppEventsEnabled -->
+    <setElement result="FacebookAutoLogEvents" value="key" text="FacebookAutoLogAppEventsEnabled"/>
+    <addElement tag="dict" name="FacebookAutoLogEvents" once="true"/>
+    <setElement result="FacebookAutoLogEventsBool" value="$B(EnableFacebookAutoLogEvents)"/>
+    <addElement tag="dict" name="FacebookAutoLogEventsBool" once="true"/>
+
+    <!-- FacebookAdvertiserIDCollectionEnabled -->
+    <setElement result="IDCollectionEnabled" value="key" text="FacebookAdvertiserIDCollectionEnabled"/>
+    <addElement tag="dict" name="IDCollectionEnabled" once="true"/>
+    <setElement result="IDCollectionEnabledBool" value="$B(EnableIDCollection)"/>
+    <addElement tag="dict" name="IDCollectionEnabledBool" once="true"/>
+
+    <!-- LSApplicationQueriesSchemes -->
+    <addElements tag="dict" once="true">
+      <key>LSApplicationQueriesSchemes</key>
+      <array>
+        <string>facebook-stories</string>
+        <string>fbapi</string>
+        <string>fbapi20130214</string>
+        <string>fbapi20130410</string>
+        <string>fbapi20130702</string>
+        <string>fbapi20131010</string>
+        <string>fbapi20131219</string>
+        <string>fbapi20140410</string>
+        <string>fbapi20140116</string>
+        <string>fbapi20150313</string>
+        <string>fbapi20150629</string>
+        <string>fbapi20160328</string>
+        <string>fbauth</string>
+        <string>fb-messenger-share-api</string>
+        <string>fbauth2</string>
+        <string>fbshareextension</string>
+      </array>
+    </addElements>
+
+    <!-- CFBundleURLTypes -->
+    <!-- Example: https://github.com/EpicGames/UnrealEngine/blob/2bf1a5b83a7076a0fd275887b373f8ec9e99d431/Engine/Plugins/Runtime/AR/AppleAR/AppleARKit/Source/AppleARKit/AppleARKit_IOS_UPL.xml -->
+
+    <setBool result="bIsCFBundleURLTypesKeyExists" value="false"/>
+
+    <loopElements tag="dict">
+      <setBool result="bIsCFBundleURLTypesKey" value="false"/>
+      <loopElements tag="$">
+          <setStringFromTag result="TagName" tag="$"/>
+
+          <setBoolIsEqual result="bIsKey" arg1="$S(TagName)" arg2="key"/>
+          <if condition="bIsKey">
+              <true>
+                  <setStringFromTagText result="TagValue" tag="$"/>
+                  <setBoolIsEqual result="bIsCFBundleURLTypesKey" arg1="$S(TagValue)" arg2="CFBundleURLTypes"/>
+                  <if condition="bIsCFBundleURLTypesKey">
+                      <true>
+                        <setBool result="bIsCFBundleURLTypesKeyExists" value="true"/>
+                        <log text="[FacebookGoodies] CFBundleURLTypes already existed in plist file and it will be updated."/>
+                      </true>
+                  </if>
+              </true>
+          </if>
+
+          <setBoolIsEqual result="bIsArray" arg1="$S(TagName)" arg2="array"/>
+          <if condition="bIsArray">
+              <true>
+                  <if condition="bIsCFBundleURLTypesKey">
+                      <true>
+                        <setElement result="FacebookUrlTypesElement" xml="&lt;dict&gt;&lt;key&gt;CFBundleURLSchemes&lt;/key&gt;&lt;array&gt;&lt;string&gt;fb$S(FacebookAppID)&lt;/string&gt;&lt;/array&gt;&lt;/dict&gt;"/>
+                        <addElement tag="$" name="FacebookUrlTypesElement"/>
+                      </true>
+                  </if>
+              </true>
+          </if>
+      </loopElements>
+    </loopElements>
+
+    <if condition="bIsCFBundleURLTypesKeyExists">
+        <false>
+          <log text="[FacebookGoodies] CFBundleURLTypes does not exist, adding it..."/>
+          <setElement result="CFBundleURLTypesKey" value="key" text="CFBundleURLTypes"/>
+          <addElement tag="dict" name="CFBundleURLTypesKey" once="true"/>
+          <setElement result="UrlScheme" xml="&lt;array&gt;&lt;dict&gt;&lt;key&gt;CFBundleURLSchemes&lt;/key&gt;&lt;array&gt;&lt;string&gt;fb$S(FacebookAppID)&lt;/string&gt;&lt;/array&gt;&lt;/dict&gt;&lt;/array&gt;"/>
+          <addElement tag="dict" name="UrlScheme" once="true"/>
+        </false>
+    </if>
+    
+    <if condition="bEnableAudienceNetwork">
+        <true>
+            <!-- SKAdNetworkItems -->
+              <!-- https://developer.apple.com/documentation/storekit/skadnetwork/configuring_the_participating_apps -->
+              <!-- https://developers.facebook.com/docs/SKAdNetwork -->
+
+              <setBool result="bIsSKAdNetworkItemsKeyExists" value="false"/>
+
+              <loopElements tag="dict">
+                <setBool result="bIsSKAdNetworkItemsKey" value="false"/>
+                <loopElements tag="$">
+                    <setStringFromTag result="TagName" tag="$"/>
+
+                    <setBoolIsEqual result="bIsKey" arg1="$S(TagName)" arg2="key"/>
+                    <if condition="bIsKey">
+                        <true>
+                            <setStringFromTagText result="TagValue" tag="$"/>
+                            <setBoolIsEqual result="bIsSKAdNetworkItemsKey" arg1="$S(TagValue)" arg2="SKAdNetworkItems"/>
+                            <if condition="bIsSKAdNetworkItemsKey">
+                                <true>
+                                  <setBool result="bIsSKAdNetworkItemsKeyExists" value="true"/>
+                                  <log text="[FacebookGoodies] SKAdNetworkItems already existed in plist file and it will be updated."/>
+                                </true>
+                            </if>
+                        </true>
+                    </if>
+
+                    <setBoolIsEqual result="bIsArray" arg1="$S(TagName)" arg2="array"/>
+                    <if condition="bIsArray">
+                        <true>
+                            <if condition="bIsSKAdNetworkItemsKey">
+                                <true>
+                                  <setElement result="SKAdNetworkItemsArrayElement1" xml="&lt;dict&gt;&lt;key&gt;SKAdNetworkIdentifier&lt;/key&gt;&lt;string&gt;v9wttpbfk9.skadnetwork&lt;/string&gt;&lt;/dict&gt;"/>
+                                  <addElement tag="$" name="SKAdNetworkItemsArrayElement1"/>
+                                  <setElement result="SKAdNetworkItemsArrayElement2" xml="&lt;dict&gt;&lt;key&gt;SKAdNetworkIdentifier&lt;/key&gt;&lt;string&gt;n38lu8286q.skadnetwork&lt;/string&gt;&lt;/dict&gt;"/>
+                                  <addElement tag="$" name="SKAdNetworkItemsArrayElement2"/>
+                                </true>
+                            </if>
+                        </true>
+                    </if>
+                </loopElements>
+              </loopElements>
+
+              <if condition="bIsSKAdNetworkItemsKeyExists">
+                  <false>
+                    <log text="[FacebookGoodies] SKAdNetworkItems does not exist, adding it..."/>
+                    <setElement result="SKAdNetworkItemsKey" value="key" text="SKAdNetworkItems"/>
+                    <addElement tag="dict" name="SKAdNetworkItemsKey" once="true"/>
+                    <setElement result="SKAdNetworkItemsArray" xml="&lt;array&gt;&lt;dict&gt;&lt;key&gt;SKAdNetworkIdentifier&lt;/key&gt;
+            &lt;string&gt;v9wttpbfk9.skadnetwork&lt;/string&gt;&lt;/dict&gt;&lt;dict&gt;&lt;key&gt;SKAdNetworkIdentifier&lt;/key&gt;&lt;string&gt;n38lu8286q.skadnetwork&lt;/string&gt;&lt;/dict&gt;&lt;/array&gt;"/>
+                    <addElement tag="dict" name="SKAdNetworkItemsArray" once="true"/>
+                  </false>
+              </if>
+        </true>
+    </if>
+  
+  </iosPListUpdates>
+
+</root>
