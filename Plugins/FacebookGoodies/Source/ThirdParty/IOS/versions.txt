@@ -1,0 +1,2 @@
+Facebook SDK 9.0.1 https://github.com/facebook/facebook-ios-sdk/releases/tag/v11.1.0
+iOS Audience Network SDK 6.2.1 https://developers.facebook.com/resources/FBAudienceNetwork-6.2.1.zip
