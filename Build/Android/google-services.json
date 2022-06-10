@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "841341044305",
+    "firebase_url": "https://beyond-dark-tales-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "beyond-dark-tales",
+    "storage_bucket": "beyond-dark-tales.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:841341044305:android:f41d6d055b69d6b6635a70",
+        "android_client_info": {
+          "package_name": "com.Exo404.QuestTale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "841341044305-1s62qg57p1tkt5ies0h69gmo83tk92od.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Exo404.QuestTale",
+            "certificate_hash": "ac6bace6864338438efe1a2c4a5a4b6a96390ddc"
+          }
+        },
+        {
+          "client_id": "841341044305-cvdd9qo0r86pjks5t94tsk8divraproc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2DNh38yHV83mO6mI6gyuEJkP96TpO5wg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "841341044305-cvdd9qo0r86pjks5t94tsk8divraproc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

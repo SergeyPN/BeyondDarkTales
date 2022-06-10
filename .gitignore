@@ -49,17 +49,14 @@ SourceArt/**/*.tga
 Binaries/*
 
 # Builds
-Build/*
-
-
-# Whitelist PakBlacklist-<BuildConfiguration>.txt files
-Build/*/**
-!Build/*/PakBlacklist*.txt
-
+Build/Android/res/*
+Build/Android/src/*
+Build/Android/exo404.keystore
+Build/Android_ASTC/*
 
 # Don't ignore icon files in Build
 !Build/**/*.ico
-!Build/**/*.json
+!google-services.json
 
 # Built data for maps
 #*_BuiltData.uasset
