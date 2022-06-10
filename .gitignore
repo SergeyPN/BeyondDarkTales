@@ -55,10 +55,11 @@ Build/*
 # Whitelist PakBlacklist-<BuildConfiguration>.txt files
 Build/*/**
 !Build/*/PakBlacklist*.txt
-!Build/Android/google-services.json
+
 
 # Don't ignore icon files in Build
 !Build/**/*.ico
+!Build/**/*.json
 
 # Built data for maps
 #*_BuiltData.uasset
