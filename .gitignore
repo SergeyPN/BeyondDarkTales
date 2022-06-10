@@ -51,10 +51,11 @@ Binaries/*
 # Builds
 Build/*
 
+
 # Whitelist PakBlacklist-<BuildConfiguration>.txt files
-!Build/Android/google-services.json
 Build/*/**
 !Build/*/PakBlacklist*.txt
+!Build/Android/google-services.json
 
 # Don't ignore icon files in Build
 !Build/**/*.ico
