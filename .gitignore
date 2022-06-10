@@ -52,7 +52,7 @@ Binaries/*
 Build/*
 
 # Whitelist PakBlacklist-<BuildConfiguration>.txt files
-!Build/*/
+!Build/Build/Android/google-services.json
 Build/*/**
 !Build/*/PakBlacklist*.txt
 
