@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) 2020 Nineva Studios
+-->
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <init>
+    <log text="[FacebookGoodies] Android UPL initialization"/>
+
+    <!--Check if FacebookID is set-->
+    <setStringFromProperty result="FacebookAppID" ini="Engine" section="/Script/FacebookGoodies.FacebookGoodiesSettings" property="FacebookAppID"/>
+    <setStringFromProperty result="FacebookClientToken" ini="Engine" section="/Script/FacebookGoodies.FacebookGoodiesSettings" property="FacebookClientToken"/>
+
+    <setIntLength result="FacebookIDLength" source="$S(FacebookAppID)"/>
+    <setBoolIsGreater result="bIsFacebookIDValid" arg1="$I(FacebookIDLength)" arg2="0"/>
+
+    <if condition="bIsFacebookIDValid">
+      <false>
+        <log text="[FacebookGoodies] Warning: Facebook App ID is not specified. Please input a valid Facebook ID in project settings. Your application will crash on start."/>
+        <return/>
+      </false>
+    </if>
+  </init>
+
+  <prebuildCopies>
+    <copyDir src="$S(PluginDir)/Private/Java" dst="$S(BuildDir)/src/com/ninevastudios/fbgoodies" />
+    <copyFile  src="$S(BuildDir)/../../../FacebookGoodies.xml" dst="$S(BuildDir)/res/values/FacebookGoodies.xml" />
+    <copyDir src="$S(PluginDir)/Private/Xml" dst="$S(BuildDir)/res/xml" />
+  </prebuildCopies>
+
+  <gradleProperties>
+    <insert>
+      android.useAndroidX=true
+      android.enableJetifier=true
+    </insert>
+  </gradleProperties>
+
+  <!-- optional additions to proguard -->
+  <proguardAdditions>
+    <insert>
+      -dontwarn com.ninevastudios.**
+      -keep class com.ninevastudios.** { *; }
+      -keep interface com.ninevastudios.** { *; }
+
+      -dontwarn com.facebook.**
+      -keep class com.facebook.** { *; }
+      -keep interface com.facebook.** { *; }
+
+      -dontwarn androidx.**
+      -keep class androidx.** { *; }
+      -keep interface androidx.** { *; }
+    </insert>
+  </proguardAdditions>
+
+  <!-- optional updates applied to AndroidManifest.xml -->
+  <androidManifestUpdates>
+    <addElements tag="application">
+      <activity android:name="com.ninevastudios.fbgoodies.FBGoodiesIntermediateActivity"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+    </addElements>
+
+    <setElement result="ProviderTag" value="provider"/>
+    <addAttribute tag="$ProviderTag" name="android:authorities" value="com.facebook.app.FacebookContentProvider$S(FacebookAppID)"/>
+    <addAttribute tag="$ProviderTag" name="android:name" value="com.facebook.FacebookContentProvider"/>
+    <addAttribute tag="$ProviderTag" name="android:exported" value="true"/>
+    <addElement tag="application" name="ProviderTag"/>
+
+    <setElement result="FacebookAppIDMeta" value="meta-data"/>
+    <addAttribute tag="$FacebookAppIDMeta" name="android:name" value="com.facebook.sdk.ApplicationId"/>
+    <addAttribute tag="$FacebookAppIDMeta" name="android:value" value="@string/facebook_app_id"/>
+    <addElement tag="application" name="FacebookAppIDMeta"/>
+
+    <setElement result="FacebookClientTokenMeta" value="meta-data"/>
+    <addAttribute tag="$FacebookClientTokenMeta" name="android:name" value="com.facebook.sdk.ClientToken"/>
+    <addAttribute tag="$FacebookClientTokenMeta" name="android:value" value="@string/facebook_client_token"/>
+    <addElement tag="application" name="FacebookClientTokenMeta"/>
+
+    <setElement result="FacebookActivity" value="activity"/>
+    <addAttribute tag="$FacebookActivity" name="android:name" value="com.facebook.FacebookActivity"/>
+    <addAttribute tag="$FacebookActivity" name="android:configChanges" value="keyboard|keyboardHidden|screenLayout|screenSize|orientation"/>
+    <addAttribute tag="$FacebookActivity" name="android:label" value="@string/app_name"/>
+    <addElement tag="application" name="FacebookActivity"/>
+
+    <!-- File provider  -->
+    <setStringFromAttribute result="PackageName" tag="manifest" name="package"/>
+    <setElement result="FBProvider" value="provider" />
+    <addAttribute tag="$FBProvider" name="android:name" value="com.ninevastudios.fbgoodies.FBFileProvider" />
+    <addAttribute tag="$FBProvider" name="android:authorities" value="$S(PackageName).FBFileProvider" />
+    <addAttribute tag="$FBProvider" name="android:exported" value="false" />
+    <addAttribute tag="$FBProvider" name="android:grantUriPermissions" value="true" />
+
+    <setElement result="FBProviderMeta" value="meta-data" />
+    <addAttribute tag="$FBProviderMeta" name="android:name" value="android.support.FILE_PROVIDER_PATHS" />
+    <addAttribute tag="$FBProviderMeta" name="android:resource" value="@xml/provider_paths" />
+    <addElement tag="$FBProvider" name="FBProviderMeta" />
+
+    <addElement tag="application" name="FBProvider" />
+
+    <!-- Permissions -->
+    <addPermission android:name="android.permission.INTERNET"/>
+  </androidManifestUpdates>
+
+  <buildGradleAdditions>
+    <insert>
+      dependencies {
+        implementation 'com.facebook.android:facebook-login:11.2.0'
+        implementation 'com.facebook.android:facebook-core:11.2.0'
+        implementation 'com.facebook.android:facebook-share:11.2.0'
+        implementation 'com.google.code.gson:gson:2.8.6'
+      }
+      repositories {
+        maven { url 'https://maven.google.com' }
+      }
+    </insert>
+  </buildGradleAdditions>
+
+  <baseBuildGradleAdditions>
+    <insert>
+      allprojects {
+        def mappings = [
+          'android.arch.lifecycle.Lifecycle': 'androidx.lifecycle.Lifecycle',
+          'android.arch.lifecycle.LifecycleObserver': 'androidx.lifecycle.LifecycleObserver',
+          'android.arch.lifecycle.OnLifecycleEvent': 'androidx.lifecycle.OnLifecycleEvent',
+          'android.arch.lifecycle.ProcessLifecycleOwner': 'androidx.lifecycle.ProcessLifecycleOwner',
+          'android.arch.lifecycle': 'androidx.lifecycle',
+          'android.support.annotation': 'androidx.annotation',
+          'android.support.v13.app.FragmentCompat': 'androidx.legacy.app.FragmentCompat',
+          'android.support.v4.app.ActivityCompat': 'androidx.core.app.ActivityCompat',
+          'android.support.v4.app.NotificationCompat': 'androidx.core.app.NotificationCompat',
+          'android.support.v4.app.NotificationManagerCompat': 'androidx.core.app.NotificationManagerCompat',
+          'android.support.v4.content.ContextCompat': 'androidx.core.content.ContextCompat',
+          'android.support.v4.content.FileProvider': 'androidx.core.content.FileProvider',
+        ]
+
+        beforeEvaluate { project ->
+          project.rootProject.projectDir.traverse(type: groovy.io.FileType.FILES, nameFilter: ~/.*\.java$/) { f ->
+            mappings.each { entry ->
+              if (f.getText('UTF-8').contains(entry.key)) {
+                println "Updating ${entry.key} to ${entry.value} in file ${f}"
+                ant.replace(file: f, token: entry.key, value: entry.value)
+              }
+            }
+          }
+        }
+      }
+    </insert>
+  </baseBuildGradleAdditions>
+
+</root>

@@ -14,7 +14,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+
 
 # Fortran module files
 *.mod
@@ -46,7 +46,7 @@ SourceArt/**/*.png
 SourceArt/**/*.tga
 
 # Binary Files
-Binaries/*
+
 
 # Builds
 Build/Android/res/*
@@ -73,7 +73,5 @@ ArchivedBuilds/*
 BuildAndroid.bat
 BuildLM.bat
 
-Plugins/*
-Plugins/FacebookGoodies
-# Plugins/AppsFlyerSDK/Intermediate
-# Plugins/AppsFlyerSDK/Binaries
+# Plugins/*
+Plugins/*/Intermediate
