@@ -75,5 +75,5 @@ BuildLM.bat
 
 # Plugins/*
 Plugins/FacebookGoodies
-Plugins/AppsFlyerSDK/Intermediate
-Plugins/AppsFlyerSDK/Binaries
+# Plugins/AppsFlyerSDK/Intermediate
+# Plugins/AppsFlyerSDK/Binaries
