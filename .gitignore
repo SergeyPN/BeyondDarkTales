@@ -73,4 +73,5 @@ ArchivedBuilds/*
 BuildAndroid.bat
 BuildLM.bat
 
-Plugins/*
+# Plugins/*
+Plugins/FacebookGoodies

@@ -34,6 +34,10 @@
 			"Name": "FacebookGoodies",
 			"Enabled": true,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/c7a93bdfb28b4141818e68201aebf3bc"
+		},
+		{
+			"Name": "AppsFlyerSDK",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
