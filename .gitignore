@@ -46,7 +46,7 @@ SourceArt/**/*.png
 SourceArt/**/*.tga
 
 # Binary Files
-
+Binaries/*
 
 # Builds
 Build/Android/res/*
