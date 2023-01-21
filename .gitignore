@@ -75,3 +75,5 @@ BuildLM.bat
 
 # Plugins/*
 Plugins/*/Intermediate
+Build/Android_Multi/FileOpenOrder/CookerOpenOrder.log
+Build/Android_Multi/FileOpenOrder/EditorOpenOrder.log
