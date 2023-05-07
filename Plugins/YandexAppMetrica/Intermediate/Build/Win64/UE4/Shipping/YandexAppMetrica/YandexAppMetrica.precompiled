@@ -1,0 +1,7 @@
+{
+	"OutputFiles": [
+		"PCH.YandexAppMetrica.h.obj",
+		"Module.YandexAppMetrica.cpp.obj",
+		"Module.YandexAppMetrica.gen.cpp.obj"
+	]
+}

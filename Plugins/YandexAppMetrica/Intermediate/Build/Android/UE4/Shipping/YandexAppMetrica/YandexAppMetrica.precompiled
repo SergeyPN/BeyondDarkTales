@@ -1,0 +1,8 @@
+{
+	"OutputFiles": [
+		"Module.YandexAppMetrica.cppa7.o",
+		"Module.YandexAppMetrica.cppa8.o",
+		"Module.YandexAppMetrica.gen.cppa7.o",
+		"Module.YandexAppMetrica.gen.cppa8.o"
+	]
+}
