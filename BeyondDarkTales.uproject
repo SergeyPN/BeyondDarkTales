@@ -43,6 +43,11 @@
 			"Name": "AndroidPlayBilling",
 			"Enabled": true,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/ad0040f7dbbc45cebdcbc4b2c5982904"
+		},
+		{
+			"Name": "YandexAppMetrica",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/4c9423add2a641ee8badf98890c5a5c1"
 		}
 	],
 	"TargetPlatforms": [
