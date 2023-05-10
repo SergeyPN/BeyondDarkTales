@@ -8,6 +8,11 @@
 #include "Engine/World.h"
 #include "AppsFlyerConversionData.h"
 #include "AppsFlyerSDKCallbacks.h"
+
+#include "Interfaces/IPluginManager.h"
+// Core
+#include "Misc/EngineVersion.h"
+
 #if PLATFORM_ANDROID
 #include "Android/AndroidJNI.h"
 #include "Android/AndroidApplication.h"
@@ -130,6 +135,18 @@ UAppsFlyerSDKBlueprint::UAppsFlyerSDKBlueprint(const FObjectInitializer &ObjectI
 
 void UAppsFlyerSDKBlueprint::configure()
 {
+    // Get Plugin VersionName
+    FString VersionName = TEXT("Unknown");
+    const TSharedPtr<IPlugin> Plugin = IPluginManager::Get().FindPlugin(TEXT("AppsFlyerSDK"));
+    if (Plugin.IsValid())
+    {
+        VersionName = Plugin->GetDescriptor().VersionName;
+    }
+
+    FString EngineVersion = FEngineVersion::Current().ToString();
+    UE_LOG(LogAppsFlyerSDKBlueprint, Display, TEXT("FEngineVersion: %s"), *FString(EngineVersion));
+    UE_LOG(LogAppsFlyerSDKBlueprint, Display, TEXT("AppsFlyerSDK Plugin VersionName: %s"), *FString(VersionName));
+
     const UAppsFlyerSDKSettings *defaultSettings = GetDefault<UAppsFlyerSDKSettings>();
     const bool isDebug = defaultSettings->bIsDebug; 
     const bool isAutoStart = defaultSettings->bEnableAutoStart; 
@@ -145,9 +162,17 @@ void UAppsFlyerSDKBlueprint::configure()
 
 #elif PLATFORM_IOS
     dispatch_async(dispatch_get_main_queue(), ^ {
-        if (!defaultSettings->appsFlyerDevKey.IsEmpty() && !defaultSettings->appleAppID.IsEmpty()) {
+        if ((!defaultSettings->appsFlyerDevKeyIOS.IsEmpty() || !defaultSettings->appsFlyerDevKey.IsEmpty()) && !defaultSettings->appleAppID.IsEmpty()) {
             [AppsFlyerLib shared].disableSKAdNetwork = defaultSettings->bDisableSKAdNetwork;
-            [AppsFlyerLib shared].appsFlyerDevKey = defaultSettings->appsFlyerDevKey.GetNSString();
+            
+            // Set Plugin Version
+            [[AppsFlyerLib shared] setPluginInfoWith:AFSDKPluginUnreal 
+                                       pluginVersion:VersionName.GetNSString() 
+                                    additionalParams:@{@"engine_version":EngineVersion.GetNSString()}];
+
+            [AppsFlyerLib shared].appsFlyerDevKey = defaultSettings->appsFlyerDevKeyIOS.IsEmpty() ?
+                defaultSettings->appsFlyerDevKey.GetNSString() : defaultSettings->appsFlyerDevKeyIOS.GetNSString();
+            
             [AppsFlyerLib shared].appleAppID = defaultSettings->appleAppID.GetNSString();
             [AppsFlyerLib shared].isDebug = isDebug;
             // Set currency code if value not `empty`
